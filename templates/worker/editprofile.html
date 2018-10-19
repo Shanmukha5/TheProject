@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Worker | Edit Profile</title>
+</head>
+<body>
+	<h1>Edit Profile Worker</h1>
+
+	{% if firstname %}
+		<form method="POST" action="/worker/editprofile/submit/">
+			{% csrf_token %}
+			<h3>First Name : <input type="text" name="firstname" value="{{firstname}}"></h3>
+			<h3>Last Name : <input type="text" name="lastname" value="{{lastname}}"></h3>
+			<h3>Phone Number : <input type="text" name="phonenumber" value="{{phonenumber}}"></h3>
+			<h3>Your doc : <a href="{{url}}" target="_blank">Mydocument</a></h3>
+			<button>Submit</button>
+		</form>
+	{% elif name %}
+		<h1>You haven't submited your profile yet!</h1>
+		<a href="/worker/submitdoc/"><button>Submit Profile</button></a>
+	{% else %}
+		<h1>User not signed in</h1>
+	{% endif %}
+</body>
+</html>
+
+
+

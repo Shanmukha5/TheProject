@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Worker</title>
+</head>
+{% if msg %}
+<script type="text/javascript">
+	alert("{{msg}}");
+</script>
+{% endif %}
+<body>
+	<h1>Worker Home</h1>
+	{% if details %}
+		<h4>{{details}}</h4>
+		<ul>
+			<li><a href="/worker/">Home</a></li>
+			<li><a href="/worker/editprofile/">Edit Profile</a></li>
+			<li><a href="/worker/status/">Status</a></li>
+		</ul>
+		<h4><a href="/worker/logout/">Logout</a></h4>
+
+	{% else %}
+		<h4>Not signed in</h4>
+		<a href="/worker/signin/"><button>Go Signin</button></a><br>
+		<a href="/worker/signup/"><button>Sign Up</button></a>
+	{% endif %}
+
+
+</body>
+</html>

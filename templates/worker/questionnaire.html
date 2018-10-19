@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TheProject | Questionnaire</title>
+</head>
+<body>
+	<h1>Questionnaire</h1>
+	{% if java %}
+		<h3>You have to solve Java Questionnaire</h3>
+		<a href="/worker/questionnaire/java/"><button>Java Questionnaire</button></a>
+		</div>
+	{% endif %}
+	{% if python %}
+		<h3>You have to solve Python Questionnaire</h3>
+		<a href="/worker/questionnaire/python/"><button>Python Questionnaire</button></a>
+	{% endif %}
+	{% if marketing %}
+		<h3>You have to solve Marketing Questionnaire</h3>
+		<a href="/worker/questionnaire/marketing/"><button>Marketing Questionnaire</button></a>
+	{% endif %}
+	{% if webdesigner %}
+		<h3>You have to solve WebDesigner : {{webdesigner}}</h3>
+		<a href="/worker/questionnaire/webdesigner/"><button>WebDesigner Questionnaire</button></a>
+	{% endif %}
+	{% ifequal No 'No' %}
+		<h3>You don't have any questionnaire to solve now. Make sure that you have submitted your profile and certificates!</h3>
+	{% endifequal %}
+
+</body>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("Java");
+    if ({{java}} != "yes") {
+    	x.style.display = 'block'
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+
+</html>

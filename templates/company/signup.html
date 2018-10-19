@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Company | Signup</title>
+</head>
+{% if msg %}
+<script type="text/javascript">
+	alert("{{msg}}")
+</script>
+{% endif %}
+<body>
+	<form method="POST" action="/company/signup/submit/">
+		{% csrf_token %}
+		Name : 
+		<input type="text" name="name">
+		Email :
+		<input type="text" name="email">
+		Password :
+		<input type="text" name="password">
+		<button type="submit">Signup</button>
+		
+	</form>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TheProject | Java</title>
+</head>
+<body>
+	<h1>Java Questionnaire</h1>
+	<form method="POST" action='/worker/questionnaire/java/submit'>
+		{% csrf_token %}
+		<p>{{javaquestion1}} : <input type="text" name="javaquestion1"></p>
+		<p>{{javaquestion2}} : <input type="text" name="javaquestion2"></p>
+		<p>{{javaquestion3}} : <input type="text" name="javaquestion3"></p>
+		<button>Submit</button>
+	</form>
+
+</body>
+</html>

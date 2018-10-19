@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registration Doc</title>
+</head>
+<body>
+	<button type="submit" action='/logout/'>Logout</button>
+	<form method="POST" action='/worker/submitdoc/submit/'>
+		{% csrf_token %}
+	<h1>Uploading Registration Documents</h1>
+	First Name : 
+	<input type="text" name="firstname"><br>
+	Last Name :
+	<input type="text" name="lastname"><br>
+	Phone Number :
+	<input type="text" name="phonenumber"><br>
+	<input type="hidden" name="email"><br>
+	Certificates :
+	<input type="file" name="files[]" id='files'>
+	<input type="hidden" name="url" id ='url'>
+	<button type="button" onclick="uploadimage()">Upload</button><br>
+	<button>Submit</button>
+	</form>
+</body>
+<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+<script>
+    var config = {
+    apiKey: "AIzaSyD7MVWjMWPnyguId_WKdJueN1TMK-8kkc4",
+    authDomain: "the-project-6ca2f.firebaseapp.com",
+    databaseURL: "https://the-project-6ca2f.firebaseio.com",
+    storageBucket: "the-project-6ca2f.appspot.com",
+    messagingSenderId: "28467301382"
+  };
+  firebase.initializeApp(config);
+  // Get a reference to the storage service, which is used to create references in your storage bucket
+  function uploadimage(){
+  var storage = firebase.storage();
+  var file = document.getElementById("files").files[0];
+  var storageRef = storage.ref();
+  var thisref = storageRef.child(file.name).put(file);
+  thisref.on('state_changed',function(snapshot){
+  console.log("file uplaoded succesfully");
+  },
+  function(error) {
+  },
+  function() {
+  // Upload completed successfully, now we can get the download URL
+  var downloadURL = thisref.snapshot.downloadURL;
+  console.log("got url");
+  document.getElementById("url").value = downloadURL;
+  alert("file uploaded successfully");
+});
+    }
+</script>
+</html>

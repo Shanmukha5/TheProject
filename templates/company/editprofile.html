@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TheProject | Edit Profile</title>
+</head>
+<body>
+	<h1>Edit Profile Company</h1>
+	{% if firstname %}
+		<form method="POST" action="/company/editprofile/submmit/">
+			{% csrf_token %}
+			<h4>First Name: <input type="text" name="firstname" value="{{firstname}}"></h4>
+			<h4>Last Name : <input type="text" name="lastname" value="{{lastname}}"></h4>
+			<h4>Company Name : <input type="text" name="companyname" value="{{name}}"></h4>
+			<h4>Job Role : <input type="text" name="jobrole" value="{{jobrole}}"></h4>
+			<h4>Official Mail : <input type="text" name="officialmail" value="{{officialmail}}"></h4>
+			<h4>Website Url : <input type="text" name="websiteurl" value="{{websiteurl}}"></h4>
+			<h4>Phone Number : <input type="text" name="phonenumber" value="{{phonenumber}}"></h4>
+			<h4>GSTCODE : <input type="text" name="gstcode" value="{{gstcode}}"></h4>
+			
+			<button>Submit</button>
+		</form>
+
+	{% elif name %}
+		<h2>You haven't submitted your profile</h2>
+		<a href="/company/submitdoc/"><button>Add profile</button></a>
+	{% else %}
+		<h2>User Not Signed in!! :(</h2>
+	{% endif %}
+
+</body>
+</html>

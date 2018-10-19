@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TheProject | Panel</title>
+</head>
+<body>
+	<h1>Panel Home Page</h1>
+	{% if email%}
+		<h3>{{email}}</h3>
+		{% for i in data %}
+			<h5>User : <a href="/panel/{{i}}/">{{i}}</a></h5>
+		{% endfor %}
+	{% else %}
+		<h3>user not signed in</h3>
+	{% endif %}
+
+</body>
+</html>
