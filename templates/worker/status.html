@@ -5,9 +5,25 @@
 </head>
 <body>
 	<h1>Status</h1>
-	{% ifequal status 'Not yet Verified!' %}
+	{% ifequal status 'Not verified yet' %}
 		<h4>Status : {{status}}</h4>
-		<h5>Chances maybe you haven't completed the process starting from Adding your profile, Adding your Certificates and last step completing the <a href="/worker/questionnaire/">Questionnaire</a></h5>
+		<ul>Your details : 
+			<li>Certificates submitted : {{certificatesstatus}}</li>
+			<li>Profile submitted : {{profilestatus}}</li>
+			<li>Java Questionnaire submitted : {{questionnairejavastatus}}</li>
+			<li>Python Questionnaire submitted : {{questionnairepythonstatus}}</li>
+			<li>Marketing Questionnaire submitted : {{questionnairemarketingstatus}}</li>
+			<li>Web Designing Questionnaire submitted : {{questionnairewebdesignerstatus}}</li>
+		</ul>
+		<form method="POST" action="/worker/status/submit/">
+			{% csrf_token %}
+			<select name="verificationsubmit">
+				<option value="---">----</option>
+				<option value="Under Verification">Submit to verification</option>
+			</select>
+			<button>Submit</button>
+
+		</form>
 	{% endifequal %}
 	{% ifequal status 'Under Verification' %}
 		<h4>Under Verification</h4>

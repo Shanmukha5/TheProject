@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 import pyrebase
 from django.contrib import auth
-
+import numpy
 
 config = {
     "apiKey": "AIzaSyD7MVWjMWPnyguId_WKdJueN1TMK-8kkc4",
@@ -26,8 +26,28 @@ def home(request):
 		a = a[0]
 		a = a['localId']
 		details = database.child('users').child("Company").child(a).child('details').child('name').get().val()
-		return render(request,'company/home.html', {'details': details})
-	except:
+		workeruids = database.child('users').child('worker').get().val()
+		javalist = []
+		for i in workeruids:
+			if(database.child('users').child('worker').child(i).child('Submitted').child('questionnairejava').get().val() == 'Yes'):
+				javacount = 0
+				if(javacount<=2):
+					for k in numpy.arange(5.0,-1.0,-0.1):
+						j = "{0: .2f}".format(k)
+						try:
+							if(database.child('users').child('worker').child(workeruids).child('rating').child('rating').get().val()==j):
+								firstname = database.child('users').child('worker').chlid(i).child('profile').child('firstname').get().val()
+								lastname = database.child('users').child('worker').child(i).child('profile').child('lastname').get().val()
+								javalist.append(firstname+lastname)
+								javacount =javacount+1
+						except:
+							continue
+				else:
+					break
+		return HttpResponse(javalist)
+		return render(request,'company/home.html', {'details': details,'javalist': javalist})
+	except Exception as ex:
+		return HttpResponse(ex)
 		message = None
 		detials = None
 		return render(request, 'company/home.html',{'msg': message})

@@ -6,6 +6,7 @@
 <body>
 	<h1>Questionnaire Webdesigning</h1>
 	<form method="POST" action="/worker/webdesigner/submit/">
+		{% csrf_token %}
 		<p>{{webdesignerquestion1}}: <input type="text" name="webdesignerquestion1"></p>
 		<p>{{webdesignerquestion2}}: <input type="text" name="webdesignerquestion2"></p>
 		<p>{{webdesignerquestion3}}: <input type="text" name="webdesignerquestion3"></p>

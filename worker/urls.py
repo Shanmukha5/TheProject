@@ -16,6 +16,7 @@ urlpatterns = [
 	url(r'^editprofile/$', views.editprofile),
 	url(r'^editprofile/submit/$', views.editprofilesubmit),
 	url(r'^status/$', views.status),
+	url(r'^status/submit/$', views.statussubmit),
 	url(r'^questionnaire/$', views.questionnaire),
 	url(r'^questionnaire/java/$', views.questionnairejava),
 	url(r'^questionnaire/python/$', views.questionnairepython),

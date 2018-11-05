@@ -6,6 +6,7 @@
 <body>
 	<h1>Python Questionnaire</h1>
 	<form method="POST" action="/worker/questionnaire/python/submit/">
+		{% csrf_token %}
 		<p>{{pythonquestion1}} : <input type="text" name="pythonquestion1"></p>
 		<p>{{pythonquestion2}} : <input type="text" name="pythonquestion2"></p>
 		<p>{{pythonquestion3}} : <input type="text" name="pythonquestion3"></p>

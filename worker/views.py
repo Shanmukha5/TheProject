@@ -28,7 +28,20 @@ def home(request):
 		a = a[0]
 		a = a['localId']
 		details = database.child('users').child("worker").child(a).child('details').child('name').get().val()
-		return render(request,'worker/home.html', {'details': details})
+		companies = database.child('users').child('Company').get().val()
+		companiesdict = {}
+		profilename = None
+		profilephonenumber = None
+		profilepic = None
+		if(database.child('users').child('worker').child(a).child('profile').get().val()!=None):
+			profilename = str(database.child('users').child('worker').child(a).child('profile').child('firstname').get().val()) + str(database.child('users').child('worker').child(a).child('profile').child('lastname').get().val())
+			profilephonenumber = database.child('users').child('worker').child(a).child('profile').child('phonenumber').get().val()
+			profilepic = database.child('users').child('worker').child(a).child('profile').child('url').get().val()
+		for i in companies:
+			companiesdict[database.child('users').child('Company').child(i).child('profile').child('companyname').get().val()] = {}
+			companiesdict[database.child('users').child('Company').child(i).child('profile').child('companyname').get().val()]['officialmail'] = database.child('users').child('Company').child(i).child('profile').child('officialmail').get().val()
+			#show officialmail and url
+		return render(request,'worker/home.html', {'details': details, 'companies': companiesdict, 'profilename': profilename, 'profilephonenumber': profilephonenumber, 'profilepic': profilepic})
 	except:
 		message = None
 		detials = None
@@ -58,6 +71,10 @@ def signupsubmit(request):
 		'verfication': 'Not Verified yet'
 	}
 	database.child("users").child("worker").child(uid).child('details').set(data)
+	count = database.child('users').child('worker').child('workercount').child('count').get().val()
+	count = count +1
+	database.child('users').child('worker').child(uid).child('details').child('id').set(int(count))
+	database.child('users').child('worker').child('workercount').child('count').set(int(count))
 	database.child('users').child('worker').child(uid).child('verfication').set(verfication)
 	submitdata = {
 		'profile': 'No',
@@ -169,7 +186,7 @@ def addcertificatessubmit(request):
 	return render(request, 'worker/redirect.html')
 
 
-def editprofile(request):
+def editprofile(request): #Have to add another input field for brief introduction of himself
 	try:
 		idToken = request.session['uid']
 		a = firebaseauth.get_account_info(idToken)
@@ -216,16 +233,35 @@ def editprofilesubmit(request):
 	return HttpResponse("Profile Updated")
 
 
-def status(request):
+def status(request):	#status should in which company the employee is working currently.
 	try:
 		idToken = request.session['uid']
 		a = firebaseauth.get_account_info(idToken)
 		a = a['users'][0]['localId']
 	except:
 		return HttpResponse("User not logged in!")
+	certificatesstatus = database.child('users').child('worker').child(a).child('Submitted').child('certificates').get().val()
+	profilestatus = database.child('users').child('worker').child(a).child('Submitted').child('profile').get().val()
+	questionnairejavastatus = database.child('users').child('worker').child(a).child('Submitted').child('questionnairejava').get().val()
+	questionnairepythonstatus = database.child('users').child('worker').child(a).child('Submitted').child('questionnairepython').get().val()
+	questionnairemarketingstatus = database.child('users').child('worker').child(a).child('Submitted').child('questionnairemarketing').get().val()
+	questionnairewebdesignerstatus = database.child('users').child('worker').child(a).child('Submitted').child('questionnairewebdesigner').get().val()
 	status = database.child('users').child('worker').child(a).child('verfication').child('verfication').get().val()
-	return render(request, 'worker/status.html', {'status':status})
+	return render(request, 'worker/status.html', {'status':status, 'certificatesstatus': certificatesstatus,'profilestatus':profilestatus, 'questionnairejavastatus': questionnairejavastatus, 'questionnairepythonstatus': questionnairepythonstatus, 'questionnairemarketingstatus': questionnairemarketingstatus, 'questionnairewebdesignerstatus': questionnairemarketingstatus})
 
+
+def statussubmit(request):
+	try:
+		idToken = request.session['uid']
+		a = firebaseauth.get_account_info(idToken)
+		a = a['users'][0]['localId']
+	except:
+		return HttpResponse("User not logged in!")
+	verificationsubmit = request.POST.get('verificationsubmit')
+	if verificationsubmit == 'Under Verification':
+		database.child('users').child('worker').child(a).child('verfication').child('verfication').set('Under Verification')
+		return HttpResponse("Your account is submitted for verification")
+	return redirect('home')
 
 def questionnaire(request): #We have to make sure that each and every question is required and should implemented with javascript
 	try:
@@ -357,7 +393,20 @@ def questionnairejavasubmit(request):
 	}
 	database.child('users').child('worker').child(a).child('questionnaire').child('Java').set(data)
 	database.child('users').child('worker').child(a).child('Submitted').child('questionnairejava').set('Yes')
-	return render(request, 'worker/home.html',{'msg':"Java Questionnaire has submitted successfully"})
+	details = database.child('users').child("worker").child(a).child('details').child('name').get().val()
+	paneluids = database.child('users').child('panel').get().val()
+	paneljavacount = 0
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='Java'):
+			paneljavacount = paneljavacount+1
+	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
+	result = workerid%paneljavacount
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('Java').set(panelname)
+			break
+	return render(request, 'worker/home.html',{'msg':"Java Questionnaire has submitted successfully", 'details': details})
 
 
 def questionnairepythonsubmit(request):
@@ -377,7 +426,20 @@ def questionnairepythonsubmit(request):
 	}
 	database.child('users').child('worker').child(a).child('questionnaire').child('Python').set(data)
 	database.child('users').child('worker').child(a).child('Submitted').child('questionnairepython').set('Yes')
-	return render(request, 'worker/home.html',{'msg':"Python Questionnaire has submitted successfully"})
+	details = database.child('users').child("worker").child(a).child('details').child('name').get().val()
+	paneluids = database.child('users').child('panel').get().val()
+	panelpythoncount = 0
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='Python'):
+			panelpythoncount = panelpythoncount+1
+	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
+	result = workerid%panelpythoncount
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('Python').set(panelname)
+			break
+	return render(request, 'worker/home.html',{'msg':"Python Questionnaire has submitted successfully", 'details': details})
 
 
 def questionnairemarketingsubmit(request):
@@ -397,7 +459,20 @@ def questionnairemarketingsubmit(request):
 	}
 	database.child('users').child('worker').child(a).child('questionnaire').child('Marketing').set(data)
 	database.child('users').child('worker').child(a).child('Submitted').child('questionnairemarketing').set('Yes')
-	return render(request, 'worker/home.html',{'msg':"Marketing Questionnaire has submitted successfully"})
+	details = database.child('users').child("worker").child(a).child('details').child('name').get().val()
+	paneluids = database.child('users').child('panel').get().val()
+	panelmarketingcount = 0
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='Marketing'):
+			panelmarketingcount = panelmarketingcount+1
+	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
+	result = workerid%panelmarketingcount
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('Marketing').set(panelname)
+			break
+	return render(request, 'worker/home.html',{'msg':"Marketing Questionnaire has submitted successfully", 'details': details})
 
 
 
@@ -419,11 +494,24 @@ def questionnairewebdesignersubmit(request):
 	}
 	database.child('users').child('worker').child(a).child('questionnaire').child('WebDesigner').set(data)
 	database.child('users').child('worker').child(a).child('Submitted').child('questionnairewebdesigner').set('Yes')
-	return render(request, 'worker/home.html',{'msg':"Webdeisgning Questionnaire has submitted successfully"})
+	details = database.child('users').child("worker").child(a).child('details').child('name').get().val()
+	paneluids = database.child('users').child('panel').get().val()
+	panelwebdesignercount = 0
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='WebDesigner'):
+			panelwebdesignercount = panelwebdesignercount+1
+	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
+	result = workerid%panelwebdesignercount
+	for i in paneluids:
+		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('WebDesigner').set(panelname)
+			break
+	return render(request, 'worker/home.html',{'msg':"Webdeisgning Questionnaire has submitted successfully", 'details': details})
 
 
-
-
+#Dashboard -- Companies should be displayed according to the skills which employee has submitted.
+#
 
 
 
@@ -448,7 +536,12 @@ def count(request):
 
 
 def seeresults(request):
-	return HttpResponse("Results")
+	idToken = request.session['uid']
+	a = firebaseauth.get_account_info(idToken)
+	a = a['users'][0]['localId']
+	if(database.child('users').child('worker').child(a).child('profile').get().val()!=None):
+		return HttpResponse("None")
+	return HttpResponse("something")
 
 
 

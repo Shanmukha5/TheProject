@@ -17,6 +17,15 @@
 			<li><a href="/company/editprofile/">Edit Profile</a></li>
 			<li><a href="/company/status/">Status</a></li>
 		</ul>
+		<h4>Employees List</h4>
+			{% if javalist %}
+				<ul>Based on Java
+					{% for i in javalist %}
+						<li>{{i}}</li>
+					{% endfor %}
+				</ul>  
+			{% endif %}
+
 		<a href="/company/logout/"><button>Logout</button></a>
 	{% else %}
 		<h4>Not signed in</h4>

@@ -17,6 +17,16 @@
 			<li><a href="/worker/editprofile/">Edit Profile</a></li>
 			<li><a href="/worker/status/">Status</a></li>
 		</ul>
+		{% if companies %}
+			{% for i in companies %}
+				<li>{{i}}</li>			
+			{% endfor %}
+		{% endif %}
+		{% if profilename %}
+			<p>Profile Name : {{profilename}}</p>
+			<p>Phone Number : {{profilephonenumber}}</p>
+			<p>Profile pic (should be displayed as an image): {{profilepic}}</p>
+		{% endif %}
 		<h4><a href="/worker/logout/">Logout</a></h4>
 
 	{% else %}

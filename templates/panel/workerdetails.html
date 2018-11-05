@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TheProject | Details</title>
+</head>
+<body>
+{% if workername %}
+	<h1>{{workername}}</h1>
+	<h3>Certificates</h3>
+		{% for i in certificates %}
+			<li><a href="{{i.url}}">certificate</a></li>
+		{% endfor %}
+	<h3>Questionnaire</h3>
+		{% for i in questionnaire %}
+			<li>{{i}}</li>
+		{% endfor %}
+
+
+	<form method="POST" action="/panel/{{uid}}/ratingsubmit/">
+		{% csrf_token %}
+  <select name="rating">
+    <option selected="selected" disabled>If no rating select 0:</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+    </select>
+  <select name="verificationbutton">
+    <option selected="selected" disabled>About verification:</option>
+            <option value="Verified">Verified</option>
+            <option value="Verification declined">Verification decline</option>
+    </select>
+    <button>Submit</button>
+
+	</form>
+{% else %}
+	<h2>No user found with that url</h2>
+
+{% endif %}
+</body>
+</html>
