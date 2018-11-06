@@ -18,9 +18,30 @@
 			<li><a href="/company/status/">Status</a></li>
 		</ul>
 		<h4>Employees List</h4>
-			{% if javalist %}
+			{% if originalpythonlist %}
+				<ul>Based on Python
+					{% for i in originalpythonlist %}
+						<li>{{i}}</li>
+					{% endfor %}
+				</ul>  
+			{% endif %}
+			{% if originaljavalist %}
 				<ul>Based on Java
-					{% for i in javalist %}
+					{% for i in originaljavalist %}
+						<li>{{i}}</li>
+					{% endfor %}
+				</ul>  
+			{% endif %}
+			{% if originalmarketinglist %}
+				<ul>Based on Marketing
+					{% for i in originalmarketinglist %}
+						<li>{{i}}</li>
+					{% endfor %}
+				</ul>  
+			{% endif %}
+			{% if originalwebdesignerlist %}
+				<ul>Based on WebDesigner
+					{% for i in originalwebdesignerlist %}
 						<li>{{i}}</li>
 					{% endfor %}
 				</ul>  

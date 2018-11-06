@@ -29,18 +29,19 @@ def home(request):
 		a = a['users']
 		a = a[0]
 		a = a['localId']
-		email = database.child('users').child('panel').child(a).child('details').child('email').get().val()
+		email = database.child('users').child('panel').child(a).child('details').child('email').child('email').get().val()
 		data = database.child('users').child('worker').shallow().get().val()
-		skill = database.child('users').child('panel').child(a).child('details').child('skill').get().val()
+		skill = database.child('users').child('panel').child(a).child('details').child('skill').child('skill').get().val()
 		list =[]
 		uidlist = []
 		for i in data:
 			if(database.child('users').child('worker').child(i).child('verfication').child('verfication').get().val()=='Under verification'):
-				if(database.child('users').child('worker').child(i).child('verifiedby').child(skill).get().val()==database.child('users').child('panel').child(a).child('details').child('email').get().val()):
+				if(database.child('users').child('worker').child(i).child('verifiedby').child(skill).child('email').get().val()==database.child('users').child('panel').child(a).child('details').child('email').child('email').get().val()):
 					list.append(database.child('users').child('worker').child(i).child('details').child('name').get().val())
 					uidlist.append(i)
 		return render(request, 'panel/home.html', {'email':email, 'data':list, 'uidlist': uidlist})
 	except:
+		return HttpResponse("Not signed in")
 		return render(request, 'panel/home.html')
 
 
@@ -64,7 +65,7 @@ def signinsubmit(request):
 	data = {
 		'email' : email,
 	}
-	data = database.child('users').child('panel').child(b).child('details').set(data)
+	data = database.child('users').child('panel').child(b).child('details').child('email').set(data)
 	return render(request, 'panel/home.html', {'email':email})
 
 def showingworkerdetails(request, workeruid):
@@ -75,12 +76,12 @@ def showingworkerdetails(request, workeruid):
 	except:
 		return HttpResponse("User not logged in!")
 	paneluids = database.child('users').child('panel').get().val()
-	mail = database.child('users').child('panel').child(a).child('details').child('email').get().val()
+	mail = database.child('users').child('panel').child(a).child('details').child('email').child('email').get().val()
 	workeruids = database.child('users').child('worker').get().val()
-	skill = database.child('users').child('panel').child(a).child('details').child('skill').get().val()
+	skill = database.child('users').child('panel').child(a).child('details').child('skill').child('skill').get().val()
 	if(a in paneluids):
 		if(workeruid in workeruids):
-			if(database.child('users').child('worker').child(workeruid).child('verifiedby').child(skill).get().val()==mail):
+			if(database.child('users').child('worker').child(workeruid).child('verifiedby').child(skill).child('email').get().val()==mail):
 				workername = database.child('users').child('worker').child(workeruid).child('details').child('name').get().val()
 				certificates = database.child('users').child('worker').child(workeruid).child('certificates').child(skill).get().val()
 				certificateslist = []
@@ -90,7 +91,9 @@ def showingworkerdetails(request, workeruid):
 				questionnairelist = []
 				for i in questionnaire:
 					questionnairelist.append(database.child('users').child('worker').child(workeruid).child('questionnaire').child(skill).child(i).get().val())
-				return render(request, 'panel/workerdetails.html', {'workername':workername,'certificates': certificateslist, 'questionnaire': questionnairelist})			
+				return render(request, 'panel/workerdetails.html', {'workername':workername,'certificates': certificateslist, 'questionnaire': questionnairelist, 'uid':workeruid})			
+			else:
+				return HttpResponse("Something")
 		else:
 			return HttpResponse("No user with that url")
 	return HttpResponse("You are not panel")
@@ -105,12 +108,13 @@ def ratingsubmit(request, workeruid):
 		return HttpResponse("User not logged in!")
 	paneluids = database.child('users').child('panel').get().val()
 	workeruids = database.child('users').child('worker').get().val()
+	skill = database.child('users').child('panel').child(a).child('details').child('skill').child('skill').get().val()
 	if(a in paneluids):
 		if(workeruid in workeruids):
 			rating = request.POST.get('rating')
 			verification = request.POST.get('verificationbutton')
 			database.child('users').child('worker').child(workeruid).child('verfication').child('verfication').set(verification)
-			database.child('users').child('worker').child(workeruid).child('rating').child('rating').set(rating)
+			database.child('users').child('worker').child(workeruid).child('rating').child(skill).child('rating').set(rating)
 			return HttpResponse("You have rated the employee successfully")
 		else:
 			return HttpResponse("No user found with that url")

@@ -28,24 +28,62 @@ def home(request):
 		details = database.child('users').child("Company").child(a).child('details').child('name').get().val()
 		workeruids = database.child('users').child('worker').get().val()
 		javalist = []
+		originaljavalist = []
+		pythonlist = []
+		originalpythonlist = []
+		verifiedlist = []
+		marketinglist = []
+		originalmarketinglist =[]
+		webdesignerlist = []
+		originalwebdesignerlist = []
 		for i in workeruids:
-			if(database.child('users').child('worker').child(i).child('Submitted').child('questionnairejava').get().val() == 'Yes'):
-				javacount = 0
-				if(javacount<=2):
-					for k in numpy.arange(5.0,-1.0,-0.1):
-						j = "{0: .2f}".format(k)
-						try:
-							if(database.child('users').child('worker').child(workeruids).child('rating').child('rating').get().val()==j):
-								firstname = database.child('users').child('worker').chlid(i).child('profile').child('firstname').get().val()
-								lastname = database.child('users').child('worker').child(i).child('profile').child('lastname').get().val()
-								javalist.append(firstname+lastname)
-								javacount =javacount+1
-						except:
-							continue
-				else:
-					break
-		return HttpResponse(javalist)
-		return render(request,'company/home.html', {'details': details,'javalist': javalist})
+			if(database.child('users').child('worker').child(i).child('verfication').child('verfication').get().val()=='Verified'):
+				verifiedlist.append(i)
+
+		for i in verifiedlist:
+			if(database.child('users').child('worker').child(i).child('Submitted').child('questionnairepython').get().val()=='Yes'):
+				pythonlist.append(i)
+			if(database.child('users').child('worker').child(i).child('Submitted').child('questionnairejava').get().val()=='Yes'):
+				javalist.append(i)
+			if(database.child('users').child('worker').child(i).child('Submitted').child('questionnairemarketing').get().val()=='Yes'):
+				marketinglist.append(i)
+			if(database.child('users').child('worker').child(i).child('Submitted').child('questionnairewebdesigner').get().val()=='Yes'):
+				webdesignerlist.append(i)
+			
+		javacount = 0
+		pythoncount = 0
+		marketingcount = 0
+		webdesignercount = 0
+
+		for i in numpy.arange(5.0,-1.0,-0.1):
+			k = float("{0: .2f}".format(i))
+			
+			if(javacount<2):
+				for p in javalist:
+					if(database.child('users').child('worker').child(p).child('rating').child('Java').child('rating').get().val()!=None and int(database.child('users').child('worker').child(p).child('rating').child('Java').child('rating').get().val())==k):
+						originaljavalist.append(p)
+						javacount = javacount+1
+
+			if(pythoncount<2):
+				for p in pythonlist:
+					if(database.child('users').child('worker').child(p).child('rating').child('Python').child('rating').get().val()!=None and int(database.child('users').child('worker').child(p).child('rating').child('Python').child('rating').get().val())==k):
+						originalpythonlist.append(p)
+						pythoncount = pythoncount+1
+			
+			if(marketingcount<2):
+				for p in marketinglist:
+					if(database.child('users').child('worker').child(p).child('rating').child('Marketing').child('rating').get().val()!=None and int(database.child('users').child('worker').child(p).child('rating').child('Marketing').child('rating').get().val())==k):
+						originalmarketinglist.append(p)
+						marketingcount = marketingcount+1
+
+			if(webdesignercount<2):
+				for p in webdesignerlist:
+					if(database.child('users').child('worker').child(p).child('rating').child('WebDesginer').child('rating').get().val()!=None and int(database.child('users').child('worker').child(p).child('rating').child('Marketing').child('rating').get().val())==k):
+						originalwebdesignerlist.append(p)
+						webdesignercount = webdesignercount+1
+
+
+		return render(request,'company/home.html', {'details': details,'originalpythonlist': originalpythonlist, 'originaljavalist': originaljavalist, 'originalmarketinglist': originalmarketinglist, 'originalwebdesignerlist': originalwebdesignerlist})
 	except Exception as ex:
 		return HttpResponse(ex)
 		message = None

@@ -68,7 +68,7 @@ def signupsubmit(request):
 		'name':name,
 	}
 	verfication = {
-		'verfication': 'Not Verified yet'
+		'verfication': 'Not verified yet'
 	}
 	database.child("users").child("worker").child(uid).child('details').set(data)
 	count = database.child('users').child('worker').child('workercount').child('count').get().val()
@@ -397,14 +397,14 @@ def questionnairejavasubmit(request):
 	paneluids = database.child('users').child('panel').get().val()
 	paneljavacount = 0
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='Java'):
+		if(database.child('users').child('panel').child(i).child('details').child('skill').child('skill').get().val()=='Java'):
 			paneljavacount = paneljavacount+1
 	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
 	result = workerid%paneljavacount
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
-			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
-			database.child('users').child('worker').child(a).child('verifiedby').child('Java').set(panelname)
+		if(database.child('users').child('panel').child(i).child('details').child('id').child('id').get().val()==result):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('Java').child('email').set(panelname)
 			break
 	return render(request, 'worker/home.html',{'msg':"Java Questionnaire has submitted successfully", 'details': details})
 
@@ -430,17 +430,15 @@ def questionnairepythonsubmit(request):
 	paneluids = database.child('users').child('panel').get().val()
 	panelpythoncount = 0
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='Python'):
+		if(database.child('users').child('panel').child(i).child('details').child('skill').child('skill').get().val()=='Python'):
 			panelpythoncount = panelpythoncount+1
 	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
 	result = workerid%panelpythoncount
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
-			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
-			database.child('users').child('worker').child(a).child('verifiedby').child('Python').set(panelname)
-			break
+		if(str(database.child('users').child('panel').child(i).child('details').child('id').child('id').get().val())==str(result) and str(database.child('users').child('panel').child(i).child('details').child('skill').child('skill').get().val())=='Python'):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('Python').child('email').set(panelname)
 	return render(request, 'worker/home.html',{'msg':"Python Questionnaire has submitted successfully", 'details': details})
-
 
 def questionnairemarketingsubmit(request):
 	try:
@@ -463,14 +461,14 @@ def questionnairemarketingsubmit(request):
 	paneluids = database.child('users').child('panel').get().val()
 	panelmarketingcount = 0
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='Marketing'):
+		if(database.child('users').child('panel').child(i).child('details').child('skill').child('skill').get().val()=='Marketing'):
 			panelmarketingcount = panelmarketingcount+1
 	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
 	result = workerid%panelmarketingcount
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
-			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
-			database.child('users').child('worker').child(a).child('verifiedby').child('Marketing').set(panelname)
+		if(database.child('users').child('panel').child(i).child('details').child('id').child('id').get().val()==result):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('Marketing').child('email').set(panelname)
 			break
 	return render(request, 'worker/home.html',{'msg':"Marketing Questionnaire has submitted successfully", 'details': details})
 
@@ -498,20 +496,16 @@ def questionnairewebdesignersubmit(request):
 	paneluids = database.child('users').child('panel').get().val()
 	panelwebdesignercount = 0
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('skill').get().val()=='WebDesigner'):
+		if(database.child('users').child('panel').child(i).child('details').child('skill').child('skill').get().val()=='WebDesigner'):
 			panelwebdesignercount = panelwebdesignercount+1
 	workerid = database.child('users').child('worker').child(a).child('details').child('id').get().val()
 	result = workerid%panelwebdesignercount
 	for i in paneluids:
-		if(database.child('users').child('panel').child(i).child('details').child('id').get().val()==result):
-			panelname = database.child('users').child('panel').child(i).child('details').child('email').get().val()
-			database.child('users').child('worker').child(a).child('verifiedby').child('WebDesigner').set(panelname)
+		if(database.child('users').child('panel').child(i).child('details').child('id').child('id').get().val()==result):
+			panelname = database.child('users').child('panel').child(i).child('details').child('email').child('email').get().val()
+			database.child('users').child('worker').child(a).child('verifiedby').child('WebDesigner').child('email').set(panelname)
 			break
 	return render(request, 'worker/home.html',{'msg':"Webdeisgning Questionnaire has submitted successfully", 'details': details})
-
-
-#Dashboard -- Companies should be displayed according to the skills which employee has submitted.
-#
 
 
 
