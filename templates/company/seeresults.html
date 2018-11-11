@@ -4,9 +4,28 @@
 	<title>TheProject | Results</title>
 </head>
 <body>
-	<div>
-		<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS1AoESzOYvPSHBujtrxTxI_OnvBSjeyL02queqrMff6cpDr0dsAJhg0x0r5jIe9do-RG2WiciO9VW6/pubhtml?widget=true&amp;headers=false"></iframe>
-	</div>
+
 
 </body>
+<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+<script>
+    var config = {
+    apiKey: "AIzaSyD7MVWjMWPnyguId_WKdJueN1TMK-8kkc4",
+    authDomain: "the-project-6ca2f.firebaseapp.com",
+    databaseURL: "https://the-project-6ca2f.firebaseio.com",
+    storageBucket: "the-project-6ca2f.appspot.com",
+    messagingSenderId: "28467301382"
+  };
+  firebase.initializeApp(config);
+var database = firebase.database();
+var workerref = database.ref().child('users');
+workerref.once('id', function(snapshot){
+	console.log('key:'+JSON.stringify(snapshot.key()));
+	console.log('val:'+JSON.stringify(snapshot.val()));
+	console.log('numChildren:'+ JSON.stringify(snapshot.numChildren()));
+	snapshot.forEach(function(item){
+		console.log(JSON.stringify(item.val()));
+	})
+})
+</script>
 </html>

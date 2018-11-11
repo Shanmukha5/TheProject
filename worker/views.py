@@ -259,7 +259,7 @@ def statussubmit(request):
 		return HttpResponse("User not logged in!")
 	verificationsubmit = request.POST.get('verificationsubmit')
 	if verificationsubmit == 'Under Verification':
-		database.child('users').child('worker').child(a).child('verfication').child('verfication').set('Under Verification')
+		database.child('users').child('worker').child(a).child('verfication').child('verfication').set('Under verification')
 		return HttpResponse("Your account is submitted for verification")
 	return redirect('home')
 

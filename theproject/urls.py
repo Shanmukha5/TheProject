@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^company/', include('company.urls')),
     url(r'^worker/', include('worker.urls')),
     url(r'^panel/', include('panel.urls')),
+    url(r'^myprofile/(?P<uid>\w+)/$', views.profiledisplay),
 ]

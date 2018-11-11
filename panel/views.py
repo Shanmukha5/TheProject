@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 import pyrebase
 from django.contrib import auth
-
+from .forms import WorkerDetailsForm
 
 
 
@@ -79,6 +79,7 @@ def showingworkerdetails(request, workeruid):
 	mail = database.child('users').child('panel').child(a).child('details').child('email').child('email').get().val()
 	workeruids = database.child('users').child('worker').get().val()
 	skill = database.child('users').child('panel').child(a).child('details').child('skill').child('skill').get().val()
+	form = WorkerDetailsForm()
 	if(a in paneluids):
 		if(workeruid in workeruids):
 			if(database.child('users').child('worker').child(workeruid).child('verifiedby').child(skill).child('email').get().val()==mail):
@@ -91,14 +92,13 @@ def showingworkerdetails(request, workeruid):
 				questionnairelist = []
 				for i in questionnaire:
 					questionnairelist.append(database.child('users').child('worker').child(workeruid).child('questionnaire').child(skill).child(i).get().val())
-				return render(request, 'panel/workerdetails.html', {'workername':workername,'certificates': certificateslist, 'questionnaire': questionnairelist, 'uid':workeruid})			
+				return render(request, 'panel/workerdetails.html', {'workername':workername,'certificates': certificateslist, 'questionnaire': questionnairelist, 'uid':workeruid, 'form':form})			
 			else:
 				return HttpResponse("Something")
 		else:
 			return HttpResponse("No user with that url")
 	return HttpResponse("You are not panel")
 
-#rating should be changed to Java verification and make changes according to it
 def ratingsubmit(request, workeruid):	
 	try:
 		idToken = request.session['uid']
@@ -106,6 +106,11 @@ def ratingsubmit(request, workeruid):
 		a = a['users'][0]['localId']
 	except:
 		return HttpResponse("User not logged in!")
+	if(request.method=='POST'):
+		form = WorkerDetailsForm(request.POST)
+		if(form.is_valid()):
+			form.save()
+			print('Form saved')
 	paneluids = database.child('users').child('panel').get().val()
 	workeruids = database.child('users').child('worker').get().val()
 	skill = database.child('users').child('panel').child(a).child('details').child('skill').child('skill').get().val()
