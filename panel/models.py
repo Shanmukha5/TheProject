@@ -6,11 +6,14 @@ class workerdetails(models.Model):
 	name = models.CharField(max_length=100000, default="Not saved properly")
 	skill = models.CharField(max_length=1000, default="Not saved properly")
 	rating = models.IntegerField(null=True, default="000")
+	description = models.CharField(max_length=10000,null=True, default="default")
+
 
 	def __str__(self):
 		return self.name
 	def __unicode__(self):
 		return self.name
+
 	
 
 #diehard

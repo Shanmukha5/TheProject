@@ -106,16 +106,17 @@ def ratingsubmit(request, workeruid):
 		a = a['users'][0]['localId']
 	except:
 		return HttpResponse("User not logged in!")
-	if(request.method=='POST'):
-		form = WorkerDetailsForm(request.POST)
-		if(form.is_valid()):
-			form.save()
-			print('Form saved')
 	paneluids = database.child('users').child('panel').get().val()
 	workeruids = database.child('users').child('worker').get().val()
 	skill = database.child('users').child('panel').child(a).child('details').child('skill').child('skill').get().val()
 	if(a in paneluids):
 		if(workeruid in workeruids):
+			if(request.method=='POST'):
+				form = WorkerDetailsForm(request.POST)
+				if(form.is_valid()):
+					some = form.save(commit=False)
+					some.description = database.child('users').child('worker').child(workeruid).child('profile').child('description').get().val()
+					some.save()
 			rating = request.POST.get('rating')
 			verification = request.POST.get('verificationbutton')
 			database.child('users').child('worker').child(workeruid).child('verfication').child('verfication').set(verification)

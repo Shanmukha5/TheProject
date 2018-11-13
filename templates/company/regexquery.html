@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Query</title>
+</head>
+<body>
+	{% if querylist %}
+		<h4>Results</h4>
+		{% for i in querylist %}
+			<p>{{i.name}}</p>
+			<p>{{i.profilelink}}</p>
+			<p>{{i.skill}}</p>
+			<p>{{i.rating}}</p>
+		{% endfor %}
+	{% endif %}
+
+</body>
+</html>

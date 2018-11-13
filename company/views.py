@@ -3,7 +3,7 @@ import pyrebase
 from django.contrib import auth
 import numpy
 from panel.models import workerdetails
-
+from django.core import serializers
 
 
 config = {
@@ -29,10 +29,10 @@ def home(request):
 		a = a[0]
 		a = a['localId']
 		details = database.child('users').child("Company").child(a).child('details').child('name').get().val()
-		pythondata = workerdetails.objects.filter(skill='Python').order_by('rating')
-		javadata = workerdetails.objects.filter(skill='Java').order_by('rating')
-		marketingdata = workerdetails.objects.filter(skill='Marketing').order_by('rating')
-		webdesignerdata = workerdetails.objects.firstname(skill='WedDesigner').order_by('rating')
+		pythondata = workerdetails.objects.filter(skill='Python').order_by('rating')[:2].values()
+		javadata = workerdetails.objects.filter(skill='Java').order_by('rating')[:2]
+		marketingdata = workerdetails.objects.filter(skill='Marketing').order_by('rating')[:2]
+		webdesignerdata = workerdetails.objects.filter(skill='WedDesigner').order_by('rating')[:2]
 		return render(request,'company/home.html', {'details': details,'pythondata': pythondata, 'javadata':javadata, 'marketingdata': marketingdata, 'webdesignerdata':webdesignerdata})
 	except Exception as ex:
 		return HttpResponse(ex)
@@ -216,10 +216,28 @@ def status(request):
 	return render(request, 'company/status.html', {'status': status})
 
 
+def skillquery(request, skillquery):
+	data = workerdetails.objects.filter(skill=skillquery).order_by('rating')
+	return HttpResponse(data)
+
+def skillqueryregex(request):
+	try:
+		idToken = request.session['uid']
+		a = firebaseauth.get_account_info(idToken)
+		a = a['users'][0]['localId']
+	except:
+		return HttpResponse("User not logged in!")
+
+
+	search = request.POST.get('searchquery')
+	data = workerdetails.objects.order_by('rating').filter(description__icontains=search).values()
+	return render(request, 'company/regexquery.html',{'querylist':data})
+
+
+
 def seeresults(request):
-	data1 = workerdetails.objects.filter(skill='Python').order_by('rating')
-	#data = workerdetails.objects.order_by('rating')
-	return HttpResponse(data1)
+	data = database.child('users').child('worker').child('s3BxD7zsBUOJbxHhgd6992gZJW43').child('profile').child('description').get().val()
+	return HttpResponse(data)
 	return render(request,'company/seeresults.html')
 
 #Checking view for just to check the new implementation techniques

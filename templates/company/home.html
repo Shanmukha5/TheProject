@@ -11,7 +11,11 @@
 <body>
 	<h1>Company Home</h1>
 	{% if details %}
-		<h4>{{details}}</h4>
+		<h4>{{details}}</h4><br>
+		<form method="POST" action="/company/skillqueryregex/">
+			{% csrf_token %}
+		<input type="text" name="searchquery" placeholder="search"><a href="/company/skillquery_"><button type="submit">search</button></a><br>
+		</form>
 		<ul>
 			<li><a href="/company/">Home</a></li>
 			<li><a href="/company/editprofile/">Edit Profile</a></li>
@@ -19,29 +23,43 @@
 		</ul>
 		<h4>Employees List</h4>
 			{% if pythondata %}
-				<h5>Python People</h5>
 					{% for i in pythondata %}
-						<p>{{i}}</p>
+						<p>Name : {{i.name}}</p>
+						<p>Skill : {{i.skill}}</p>
+						<p>Rating : {{i.rating}}</p>
+
 					{% endfor %}
 			{% endif %}
 			{% if javadata %}
-				<h5>Java People</h5>
 					{% for i in javadata %}
-						<p>{{i}}</p>
+						<p>Name : {{i.name}}</p>
+						<p>Skill : {{i.skill}}</p>
+						<p>Rating : {{i.rating}}</p>
 					{% endfor %}
 			{% endif %}
 			{% if marketingdata %}
-				<h5>Marketing People</h5>
 					{% for i in marketingdata %}
-						<p>{{i}}</p>
+						<p>Name : {{i.name}}</p>
+						<p>Skill : {{i.skill}}</p>
+						<p>Rating : {{i.rating}}</p>
 					{% endfor %}
 			{% endif %}
 			{% if webdesignerdata %}
-				<h5>WedDesigner People</h5>
 					{% for i in webdesignerdata %}
-						<p>{{i}}</p>
+						<p>Name : {{i.name}}</p>
+						<p>Skill : {{i.skill}}</p>
+						<p>Rating : {{i.rating}}</p>
 					{% endfor %}
 			{% endif %}
+			<div>
+				<h5>Search for employees</h5>
+				<ul>
+					<li><a href="/company/query_Java/">Java</a></li>
+					<li><a href="/company/query_Python/">Python</li>
+					<li><a href="/company/query_Marketing/">Marketing</li>
+					<li><a href="/company/query_WedDesigner/">Web Designing</li>
+				</ul>
+			</div>
 		<a href="/company/logout/"><button>Logout</button></a>
 	{% else %}
 		<h4>Not signed in</h4>

@@ -127,7 +127,7 @@ def submitdocsubmit(request):
 	firstname = request.POST.get('firstname')
 	lastname = request.POST.get('lastname')	
 	phonenumber = request.POST.get('phonenumber')
-
+	description = request.POST.get('description')
 	idToken = request.session['uid']
 	a = firebaseauth.get_account_info(idToken)
 	a = a['users']
@@ -138,6 +138,7 @@ def submitdocsubmit(request):
 		'lastname': lastname,
 		'phonenumber': phonenumber,
 		'url':url,
+		'description': description,
 	}
 	abc = database.child('users').child('worker').child(a).child('profile').set(data)
 	database.child('users').child('worker').child(a).child('Submitted').child('profile').set('Yes')
