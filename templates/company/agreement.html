@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Agreement</title>
+</head>
+<body>
+	<h3>Agreement</h3>
+	<p>Company name : {{companyname}} wants to hire {{workername}} for {{month}} months, skill : {{skill}}</p>
+	<form action="/company/{{uid}}/agreement/" method="POST">	
+        {% csrf_token %}
+ 	<input type="hidden" name="time" value="{{month}}">
+ 	<input type="hidden" name="skill" value="{{skill}}">
+  <select name="agreementsubmission">
+    <option selected="selected" disabled>No Skill selected:</option>
+
+            <option value="Request">Request</option>
+            <option value="Decline">Decline</option>
+    </select>
+    <button>submit</button>
+	</form>
+
+
+</body>
+</html>

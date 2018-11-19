@@ -5,5 +5,5 @@ class WorkerDetailsForm(forms.ModelForm):
 	
 	class Meta:
 		model = workerdetails
-		fields = ['profilelink', 'name', 'rating', 'skill']
+		fields = ['name', 'rating', 'skill']
 

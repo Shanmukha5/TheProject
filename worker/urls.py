@@ -26,6 +26,7 @@ urlpatterns = [
 	url(r'^questionnaire/python/submit/$', views.questionnairepythonsubmit),
 	url(r'^questionnaire/marketing/submit/$', views.questionnairemarketingsubmit),
 	url(r'^questionnaire/webdesigner/submit/$', views.questionnairewebdesignersubmit),
+	url(r'^myprofile/(?P<companyuid>\w+)/(?P<notificationcount>\w+)/$', views.agreement),
 
 	url(r'^seeresults/$', views.seeresults),
 

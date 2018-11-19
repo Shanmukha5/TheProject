@@ -40,7 +40,8 @@ def home(request):
 					list.append(database.child('users').child('worker').child(i).child('details').child('name').get().val())
 					uidlist.append(i)
 		return render(request, 'panel/home.html', {'email':email, 'data':list, 'uidlist': uidlist})
-	except:
+	except Exception as ex:
+		return HttpResponse(ex)
 		return HttpResponse("Not signed in")
 		return render(request, 'panel/home.html')
 
@@ -116,6 +117,8 @@ def ratingsubmit(request, workeruid):
 				if(form.is_valid()):
 					some = form.save(commit=False)
 					some.description = database.child('users').child('worker').child(workeruid).child('profile').child('description').get().val()
+					some.profilelink = "127.0.1:8000/myprofile/"+str(workeruid)+"/"
+					some.uid = str(workeruid)
 					some.save()
 			rating = request.POST.get('rating')
 			verification = request.POST.get('verificationbutton')

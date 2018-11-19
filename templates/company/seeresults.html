@@ -4,28 +4,12 @@
 	<title>TheProject | Results</title>
 </head>
 <body>
+  <form method="POST" action="/company/checking/">
+    <input type="button" name="on" value="on">
+    <input type="button" name="off" value="off">
+    <button>submit</button>
+  </form>
 
 
 </body>
-<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
-<script>
-    var config = {
-    apiKey: "AIzaSyD7MVWjMWPnyguId_WKdJueN1TMK-8kkc4",
-    authDomain: "the-project-6ca2f.firebaseapp.com",
-    databaseURL: "https://the-project-6ca2f.firebaseio.com",
-    storageBucket: "the-project-6ca2f.appspot.com",
-    messagingSenderId: "28467301382"
-  };
-  firebase.initializeApp(config);
-var database = firebase.database();
-var workerref = database.ref().child('users');
-workerref.once('id', function(snapshot){
-	console.log('key:'+JSON.stringify(snapshot.key()));
-	console.log('val:'+JSON.stringify(snapshot.val()));
-	console.log('numChildren:'+ JSON.stringify(snapshot.numChildren()));
-	snapshot.forEach(function(item){
-		console.log(JSON.stringify(item.val()));
-	})
-})
-</script>
 </html>

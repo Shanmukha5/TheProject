@@ -16,7 +16,10 @@ urlpatterns = [
 	url(r'^status/$', companyviews.status),
 	url(r'^skillqueryregex/$', companyviews.skillqueryregex),
 	url(r'^query_(?P<skillquery>\w+)/$', companyviews.skillquery),
+	url(r'^(?P<uid>\w+)/hire/$', companyviews.hire),
+	url(r'^(?P<uid>\w+)/agreement/$', companyviews.agreement),
 	url(r'^seeresults/$', companyviews.seeresults),
+	url(r'myprofile/(?P<uid>\w+)/$', companyviews.profile),
 ]
 
 

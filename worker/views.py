@@ -84,6 +84,7 @@ def signupsubmit(request):
 		'questionnairemarketing': 'No',
 		'questionnairewebdesigner': 'No'
 	}
+	database.child('users').child('worker').child(uid).child('notifications').child('notificationcount').child('count').set(0)
 	database.child('users').child('worker').child(uid).child('Submitted').set(submitdata)
 	message = "Your account has created successfully. Now Sign in."
 	return render(request, 'worker/signup.html',{'msg':message})
@@ -509,6 +510,22 @@ def questionnairewebdesignersubmit(request):
 	return render(request, 'worker/home.html',{'msg':"Webdeisgning Questionnaire has submitted successfully", 'details': details})
 
 
+def agreement(request, companyuid, notificationcount):
+	try:
+		idToken = request.session['uid']
+		a = firebaseauth.get_account_info(idToken)
+		a = a['users'][0]['localId']
+	except:
+		return HttpResponse("User not logged in!")
+	companyuids = database.child('users').child('Company').get().val()
+	if(companyuid in companyuids):
+		companyname = database.child('users').child('Company').child(companyuid).child('profile').child('companyname').get().val()
+		skill = database.child('users').child('worker').child(a).child('notifications').child(notificationcount).child('skill').get().val()
+		time = database.child('users').child('worker').child(a).child('notifications').child(notificationcount).child('time').get().val()
+		return render(request, 'worker/agreement.html',{'companyname':companyname,'skill':skill, 'time':time})
+	else:
+		return HttpResponse("NO data found with that url")
+		#After this agreement should be saved(proceed/decline)
 
 
 

@@ -6,6 +6,7 @@ class workerdetails(models.Model):
 	name = models.CharField(max_length=100000, default="Not saved properly")
 	skill = models.CharField(max_length=1000, default="Not saved properly")
 	rating = models.IntegerField(null=True, default="000")
+	uid = models.CharField(max_length=100000, default='default', null=True)
 	description = models.CharField(max_length=10000,null=True, default="default")
 
 

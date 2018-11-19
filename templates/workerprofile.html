@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Profile</title>
+</head>
+<body>
+	<h3>Details</h3>
+	<p>Name : {{profile.firstname}} {{profile.lastname}}</p>
+	<p>Phone Number : {{profile.phonenumber}}</p>
+	<p>Profile image: <a href="{{profile.url}}">image</a></p>
+	{% for i,j in data %}
+		<p>Skill : {{i}}</p>
+		<p>Rating : {{j}}</p>
+	{% endfor %}
+	<form method="POST" action="/company/{{uid}}/hire/">
+		{% csrf_token %}
+		<p>skill you want to hire for : <input type="text" name="skill"></p>
+		<p>Months : <input type="text" name="month"></p>
+		<button>hire</button>
+		
+	</form>
+</body>
+</html>

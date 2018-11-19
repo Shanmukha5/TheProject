@@ -36,9 +36,15 @@ def profiledisplay(request, uid):
 	paneluids = database.child('users').child('panel').shallow().get().val()
 	workeruids = database.child('users').child('worker').shallow().get().val()
 	companyuids = database.child('users').child('Company').shallow().get().val()
-	if(a in paneluids or workeruids or companyuids):
+	if(a in workeruids or paneluids or companyuids):
 		if(uid in workeruids):
-			return HttpResponse(uid)
-		else:
-			return HttpResponse("No user found with that url")
-	return HttpResponse("You have to logged in to view profile")
+			profile = database.child('users').child('worker').child(uid).child('profile').get().val()
+			skills = database.child('users').child('worker').child(uid).child('rating').get().val()
+			ratinglist = []
+			for i in skills:
+				ratinglist.append(database.child('users').child('worker').child(uid).child('rating').child(i).child('rating').get().val())
+			data = zip(skills,ratinglist)
+			return render(request, 'workerprofile.html', {'profile': profile, 'data': data,'uid':uid})
+			return HttpResponse(profile)
+	else:
+		return HttpResponse("No user found with that url")
